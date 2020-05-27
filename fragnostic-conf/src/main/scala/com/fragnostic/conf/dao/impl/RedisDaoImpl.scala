@@ -22,19 +22,28 @@ trait RedisDaoImpl extends CacheDaoApi with RedisConnectionAgnostic {
         },
         statusCodeReply => Right(statusCodeReply))
 
-    override def get(key: String): Option[String] =
+    override def set(key: String, value: Short): Either[String, String] = ???
+
+    override def set(key: String, value: Int): Either[String, String] = ???
+
+    override def set(key: String, value: Long): Either[String, String] = ???
+
+    override def get(key: String): Either[String, Option[String]] =
       Try(jedis.get(key)) fold (
         error => {
           logger.error(s"get() - error on try to retrieve key[$key], ${error.getMessage}")
-          None
+          Left(error.getMessage)
         },
-        bulkReply => Option(bulkReply))
+        bulkReply => Right(Option(bulkReply)))
 
-    override def del(key: String): Option[String] =
-      get(key).flatMap(value => {
-        if (jedis.del(key) == 1) Option(value)
-        else None
-      })
+    override def del(key: String): Either[String, Option[String]] =
+      get(key) fold (
+        error => Left(error),
+        opt => opt map (
+          value => if (jedis.del(key) == 1) Right(Option(value)) else Left("redis.dao.del.error")) getOrElse Right(None))
+
+    override def delAllKeys(): String =
+      jedis.flushAll()
 
   }
 

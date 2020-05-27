@@ -1,21 +1,44 @@
 package com.fragnostic.conf.service.support
 
-import java.util.Locale
+import java.util.UUID
 
 import com.fragnostic.i18n.AbstractSingleMessageI18n
-import org.scalatest.{ FunSpec, Matchers }
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach, FunSpec, Matchers }
 
-trait BaseConfTest extends FunSpec with Matchers with AbstractSingleMessageI18n {
+// dont import scala.language.postfixOps
+import scala.language.postfixOps
+// dont import scala.sys.process._
+import scala.sys.process._
+
+trait BaseConfTest extends FunSpec with Matchers with BeforeAndAfterEach with BeforeAndAfterAll with AbstractSingleMessageI18n {
 
   override def baseDir: String = "CONF_PROPS"
 
-  override def baseName: String = "cl.atacamasoft.fp.conf.service.futurepyme-conf"
+  override def baseName: String = "com.fragnostic.conf.fragnostic-conf"
 
-  protected val localeEsCl: Locale =
-    new Locale.Builder().setRegion("CL").setLanguage("es").build()
-  protected val localeEnUs: Locale =
-    new Locale.Builder().setRegion("US").setLanguage("en").build()
-  protected val localePtBr: Locale =
-    new Locale.Builder().setRegion("BR").setLanguage("pt").build()
+  protected val keyUnoDosTres = "uno.dos.tres.string"
+  protected val valueUnoDosTresStringEsCl = "Uno, Dos y Tres"
+  protected val valueUnoDosTresStringPtBr = "Um, Dois e Tr\u00eas"
+  protected val valueUnoDosTresStringEnUs = "One, Two and Three"
+  protected val cacheKeyNowhere = "asdasdad"
+
+  def nextRandomKey: String = UUID.randomUUID().toString.substring(0, 8)
+
+  override def beforeAll(): Unit = {
+    val ans: Int = "./fragnostic-conf/src/test/resources/beforeall/antbeforeall" !
+
+    //
+    println(s"ans:\n$ans\n")
+    //
+  }
+
+  override def afterAll(): Unit = {
+    //dataSource.close()
+    val ans: Int = "./fragnostic-conf/src/test/resources/afterall/antafterall" !
+
+    //
+    println(s"ans:\n$ans\n")
+    //
+  }
 
 }

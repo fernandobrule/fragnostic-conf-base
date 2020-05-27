@@ -9,17 +9,31 @@ import com.fragnostic.i18n.api.ResourceI18n
  */
 trait ConfServiceApi {
 
-  def confService: ConfServiceApi
+  def confServiceApi: ConfServiceApi
 
   trait ConfServiceApi {
 
     def validate(vars: List[String]): Map[String, String]
 
-    def getString(locale: Option[Locale] = None, i18n: Option[ResourceI18n] = None, key: String): Either[String, Option[String]]
+    def set(key: String, value: String): Either[String, String]
 
-    def getInt(name: String): Either[String, Int]
+    def set(key: String, value: Short): Either[String, String]
 
-    def getLong(str: String): Either[String, Int]
+    def set(key: String, value: Int): Either[String, String]
+
+    def set(key: String, value: Long): Either[String, String]
+
+    def getString(locale: Option[Locale] = None, props: Option[ResourceI18n] = None, key: String): Either[String, Option[String]]
+
+    def getShort(props: Option[ResourceI18n] = None, key: String): Either[String, Option[Short]]
+
+    def getInt(props: Option[ResourceI18n] = None, key: String): Either[String, Option[Int]]
+
+    def getLong(props: Option[ResourceI18n] = None, key: String): Either[String, Option[Long]]
+
+    def del(key: String): Either[String, Option[String]]
+
+    def delAllKeys(): Either[String, String]
 
   }
 

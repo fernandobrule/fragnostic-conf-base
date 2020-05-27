@@ -1,129 +1,130 @@
 package com.fragnostic.conf.service
 
-import com.fragnostic.conf.service.support.LifeCycleSupportCache
+import java.util.Locale
 
-class ConfServiceGetStringTest extends LifeCycleSupportCache {
+import com.fragnostic.conf.service.support.{ BaseConfTest, KeySupport }
 
-  val cacheKeyOne: String = "uno.dos.tres"
-  val cacheKeyNowhere: String = "one.two.three"
-  val cacheKeyString: String = "the.numbers"
-  val stringValueEsCl: String = "Uno, Dos y Tres"
-  val stringValueEnUs: String = "One, Two and Three"
-  val stringValuePtBr: String = "Um, Dois e Tr\u00eas"
-  val defaultValueStringEsCl: Option[String] = Some(stringValueEsCl)
-  val defaultValueStringEnUs: Option[String] = Some(stringValueEnUs)
-  val defaultValueStringPtBr: Option[String] = Some(stringValuePtBr)
+class ConfServiceGetStringTest extends BaseConfTest with KeySupport {
 
-  override def beforeAll(): Unit = {
-    cacheService.del(cacheKeyOne)
-    cacheService.del(cacheKeyNowhere)
+  val keyEnv: String = "TEST_KEY_ENV"
+
+  //
+  // es/CL
+  //
+  val localeEsCl: Locale = new Locale.Builder().setRegion("CL").setLanguage("es").build()
+  val keyEsCl: String = nextRandomKey
+  val valueEsCl: String = nextRandomKey
+
+  //
+  // pt/BR
+  //
+  val localePtBr: Locale = new Locale.Builder().setRegion("BR").setLanguage("pt").build()
+  val keyPtBr: String = nextRandomKey
+  val valuePtBr: String = nextRandomKey
+
+  //
+  // en/US
+  //
+  val localeEnUs: Locale = new Locale.Builder().setRegion("US").setLanguage("en").build()
+  val keyEnUs: String = nextRandomKey
+  val valueEnUs: String = nextRandomKey
+
+  override def beforeEach(): Unit = {
+    CakeConfService.confServiceApi.set(keyEsCl, valueEsCl)
+    CakeConfService.confServiceApi.set(i18nKey(localeEsCl, keyEsCl), valueEsCl)
+    CakeConfService.confServiceApi.set(i18nKey(localePtBr, keyPtBr), valuePtBr)
+    CakeConfService.confServiceApi.set(i18nKey(localeEnUs, keyEnUs), valueEnUs)
   }
 
-  override def afterAll(): Unit = {
-    cacheService.del(cacheKeyOne)
-    cacheService.del(cacheKeyNowhere)
+  override def afterEach(): Unit = {
+    CakeConfService.confServiceApi.del(keyEsCl)
+    CakeConfService.confServiceApi.del(i18nKey(localeEsCl, keyEsCl))
+    CakeConfService.confServiceApi.del(i18nKey(localePtBr, keyPtBr))
+    CakeConfService.confServiceApi.del(i18nKey(localeEnUs, keyEnUs))
   }
 
-  describe("Conf Service Get As String Test") {
+  describe("Conf Service Get String Test") {
+
+    it("Can Get Value As String from Cache") {
+
+      val opt = CakeConfService.confServiceApi.getString(key = keyEsCl) fold (
+        error => throw new IllegalStateException(error),
+        opt => opt)
+
+      opt should not be None
+      opt.get should be(valueEsCl)
+    }
 
     it("Can Get Value As String es/CL from Cache") {
 
-      cacheService.set(cacheKeyString, stringValueEsCl)
-
-      val opt = cacheService.getString(localeEsCl, this, cacheKeyString, None)
+      val opt = CakeConfService.confServiceApi.getString(locale = Some(localeEsCl), key = keyEsCl) fold (
+        error => throw new IllegalStateException(error),
+        opt => opt)
 
       opt should not be None
-      opt.get should be(stringValueEsCl)
-
+      opt.get should be(valueEsCl)
     }
 
     it("Can Get Value As String pt/BR from Cache") {
 
-      cacheService.set(cacheKeyString, stringValuePtBr)
-
-      val opt = cacheService.getString(localeEsCl, this, cacheKeyString, None)
+      val opt = CakeConfService.confServiceApi.getString(locale = Some(localePtBr), key = keyPtBr) fold (
+        error => throw new IllegalStateException(error),
+        opt => opt)
 
       opt should not be None
-      opt.get should be(stringValuePtBr)
-
+      opt.get should be(valuePtBr)
     }
 
     it("Can Get Value As String en/US from Cache") {
 
-      cacheService.set(cacheKeyString, stringValueEnUs)
-
-      val opt = cacheService.getString(localeEsCl, this, cacheKeyString, None)
-
-      opt should not be None
-      opt.get should be(stringValueEnUs)
-
-    }
-
-    it("Can Get Value As String es/CL from Props") {
-
-      cacheService.del(cacheKeyString)
-      val opt = cacheService.getString(localeEsCl, this, cacheKeyString, None)
+      val opt = CakeConfService.confServiceApi.getString(locale = Some(localeEnUs), key = keyEnUs) fold (
+        error => throw new IllegalStateException(error),
+        opt => opt)
 
       opt should not be None
-      opt.get should be(stringValueEsCl)
-
+      opt.get should be(valueEnUs)
     }
 
-    it("Can Get Value As String en/US from Props") {
+    it("Can Get Value As String from Environment") {
 
-      cacheService.del(cacheKeyString)
-      val opt = cacheService.getString(localeEnUs, this, cacheKeyString, None)
+      val opt = CakeConfService.confServiceApi.getString(key = keyEnv) fold (
+        error => throw new IllegalStateException(error),
+        opt => opt)
 
       opt should not be None
-      opt.get should be(stringValueEnUs)
-
+      opt.get should be("yep env")
     }
 
-    it("Can Get Value As String pt/BR from Props") {
+    it("Can Get Value As String es/CL from Properties") {
 
-      cacheService.del(cacheKeyString)
-      val opt = cacheService.getString(localePtBr, this, cacheKeyString, None)
+      val opt = CakeConfService.confServiceApi.getString(Some(localeEsCl), Option(this), keyUnoDosTres) fold (
+        error => throw new IllegalStateException(error),
+        opt => opt)
 
       opt should not be None
-      opt.get should be(stringValuePtBr)
-
+      opt.get should be(valueUnoDosTresStringEsCl)
     }
 
-    it("Can Get Value As String es/CL from Default") {
+    it("Can Get Value As String pt/BR from Properties") {
 
-      val opt = cacheService.getString(localeEsCl, this, cacheKeyNowhere, defaultValueStringEsCl)
+      val opt = CakeConfService.confServiceApi.getString(Some(localePtBr), Option(this), keyUnoDosTres) fold (
+        error => throw new IllegalStateException(error),
+        opt => opt)
 
       opt should not be None
-      opt.get should be(stringValueEsCl)
-
+      opt.get should be(valueUnoDosTresStringPtBr)
     }
 
-    it("Can Get Value As String en/US from Default") {
+    it("Can Get Value As String en/US from Properties") {
 
-      val opt = cacheService.getString(localeEsCl, this, cacheKeyNowhere, defaultValueStringEnUs)
+      val opt = CakeConfService.confServiceApi.getString(Some(localeEnUs), Option(this), keyUnoDosTres) fold (
+        error => throw new IllegalStateException(error),
+        opt => opt)
 
       opt should not be None
-      opt.get should be(stringValueEnUs)
-
-    }
-
-    it("Can Get Value As String pt/BR from Default") {
-
-      val opt = cacheService.getString(localeEsCl, this, cacheKeyNowhere, defaultValueStringPtBr)
-
-      opt should not be None
-      opt.get should be(stringValuePtBr)
-
-    }
-
-    it("Can Not Get Value As String From Key That Does Not Exists") {
-
-      val key = "ads.try.dvfdsfg.qwe"
-      cacheService.getString(localeEsCl, this, key, None) should be(None)
-
+      opt.get should be(valueUnoDosTresStringEnUs)
     }
 
   }
 
 }
-

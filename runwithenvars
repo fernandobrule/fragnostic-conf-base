@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export TEST_KEY_ENV=yep env
+
 #
 # db
 #export IP_DB=localhost
