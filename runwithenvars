@@ -1,15 +1,3 @@
 #!/bin/bash
 
-export TEST_KEY_ENV=yep env
-
-#
-# db
-#export IP_DB=localhost
-export MYSQL8_DATASOURCE_PROPERTY_FILE_NAME=/Users/fernandobrule/Clones/fragnostic/fragnostic-code/fragnostic-conf/fragnostic-conf/src/test/resources/fragnostic-dao-mysql8-datasource-test.properties
-
-export REDIS_HOST=localhost
-export REDIS_PORT=6379
-
-export CONF_PROPS=/Users/fernandobrule/Clones/fragnostic/fragnostic-code/fragnostic-conf/fragnostic-conf/src/test/resources
-
 ./sbt -v -213
