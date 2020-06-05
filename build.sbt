@@ -13,7 +13,7 @@ val unusedOptions = Def.setting(
 )
 
 lazy val scalatraSettings = Seq(
-  organization := "cl.atacamasoft",
+  organization := "com.fragnostic",
   fork in Test := true,
   baseDirectory in Test := file("."),
   crossScalaVersions := Seq("2.12.11", "2.11.12", "2.13.1"),
@@ -44,15 +44,15 @@ lazy val scalatraSettings = Seq(
 )
 
 lazy val fragnosticConfProject = Project(
-  id = "fragnostic-conf",
+  id = "fragnostic-conf-support",
   base = file(".")).settings(
     scalatraSettings ++ Seq(
-    name := "fragnostic conf",
+    name := "fragnostic conf support",
     artifacts := Classpaths.artifactDefs(Seq(packageDoc in Compile, makePom in Compile)).value,
     packagedArtifacts := Classpaths.packaged(Seq(packageDoc in Compile, makePom in Compile)).value,
-    description := "fragnostic conf",
+    description := "fragnostic conf support",
     shellPrompt := { state =>
-      s"sbt:${Project.extract(state).currentProject.id}" + Def.withColor("> ", Option(scala.Console.CYAN))
+      s"sbt:fragnostic conf support" + Def.withColor("> ", Option(scala.Console.CYAN))
     }
   ) ++ Defaults.packageTaskSettings(
     packageDoc in Compile, (unidoc in Compile).map(_.flatMap(Path.allSubpaths))
@@ -62,15 +62,14 @@ lazy val fragnosticConfProject = Project(
 
 
 lazy val fragnosticConf = Project(
-  id = "fragnostic-conf",
-  base = file("fragnostic-conf")).settings(
+  id = "fragnostic-conf-support",
+  base = file("fragnostic-conf-support")).settings(
     scalatraSettings ++ Seq(
     libraryDependencies ++= Seq(
     ) ,
-    description := "fragnostic-conf"
+    description := "fragnostic-conf-support"
   )
 ) dependsOn(
-  // some module
 )
 
 lazy val manifestSetting = packageOptions += {
