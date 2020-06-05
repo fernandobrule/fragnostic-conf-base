@@ -66,13 +66,7 @@ lazy val fragnosticConf = Project(
   base = file("fragnostic-conf")).settings(
     scalatraSettings ++ Seq(
     libraryDependencies ++= Seq(
-      logbackClassic,
-      slf4jApi,
-      scalatest,
-      fragnosticI18n,
-      fragnosticDaoJdbcImplMysql,
-      jedis
-    ) ++ specs2.map(_ % "test"),
+    ) ,
     description := "fragnostic-conf"
   )
 ) dependsOn(
