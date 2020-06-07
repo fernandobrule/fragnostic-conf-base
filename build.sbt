@@ -57,15 +57,16 @@ lazy val fragnosticConfProject = Project(
   ) ++ Defaults.packageTaskSettings(
     packageDoc in Compile, (unidoc in Compile).map(_.flatMap(Path.allSubpaths))
   )).aggregate(
-    fragnosticConf
+    fragnosticConfSupport
   ).enablePlugins(ScalaUnidocPlugin)
 
 
-lazy val fragnosticConf = Project(
+lazy val fragnosticConfSupport = Project(
   id = "fragnostic-conf-support",
   base = file("fragnostic-conf-support")).settings(
     scalatraSettings ++ Seq(
     libraryDependencies ++= Seq(
+      scalatest
     ) ,
     description := "fragnostic-conf-support"
   )

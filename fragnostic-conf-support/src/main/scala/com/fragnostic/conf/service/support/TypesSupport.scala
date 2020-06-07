@@ -4,22 +4,15 @@ import scala.util.Try
 
 trait TypesSupport {
 
-  def toInt(opt: Option[String]): Either[String, Option[Int]] =
+  def toType[T](opt: Option[String], fn: String => T): Either[String, Option[T]] =
     opt map (
-      valueString => Try(valueString.toInt) fold (
+      valueString => Try(fn(valueString)) fold (
         error => Left(error.getMessage),
-        valueInt => Right(Option(valueInt)))) getOrElse Right(None)
+        valueType => Right(Option(valueType)))) getOrElse Right(None)
 
-  def toShort(opt: Option[String]): Either[String, Option[Short]] =
-    opt map (
-      valueString => Try(valueString.toShort) fold (
-        error => Left(error.getMessage),
-        valueShort => Right(Option(valueShort)))) getOrElse Right(None)
-
-  def toLong(opt: Option[String]): Either[String, Option[Long]] =
-    opt map (
-      valueString => Try(valueString.toLong) fold (
-        error => Left(error.getMessage),
-        valueLong => Right(Option(valueLong)))) getOrElse Right(None)
+  def getType[T](either: Either[String, Option[T]], valueDefault: T): T =
+    either fold (
+      error => valueDefault,
+      opt => opt map (value => value) getOrElse valueDefault)
 
 }
