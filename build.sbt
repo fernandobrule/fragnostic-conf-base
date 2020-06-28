@@ -43,32 +43,32 @@ lazy val scalatraSettings = Seq(
   scalacOptions in (c, console) --= unusedOptions.value
 )
 
-lazy val fragnosticConfProject = Project(
-  id = "fragnostic-conf-support",
+lazy val project = Project(
+  id = "fragnostic-conf-base",
   base = file(".")).settings(
     scalatraSettings ++ Seq(
-    name := "fragnostic conf support",
+    name := "fragnostic conf base",
     artifacts := Classpaths.artifactDefs(Seq(packageDoc in Compile, makePom in Compile)).value,
     packagedArtifacts := Classpaths.packaged(Seq(packageDoc in Compile, makePom in Compile)).value,
-    description := "fragnostic conf support",
+    description := "fragnostic conf base",
     shellPrompt := { state =>
-      s"sbt:fragnostic conf support" + Def.withColor("> ", Option(scala.Console.CYAN))
+      s"sbt:${Project.extract(state).currentProject.id}" + Def.withColor("> ", Option(scala.Console.RED))
     }
   ) ++ Defaults.packageTaskSettings(
     packageDoc in Compile, (unidoc in Compile).map(_.flatMap(Path.allSubpaths))
   )).aggregate(
-    fragnosticConfSupport
+    fragnosticConfBase
   ).enablePlugins(ScalaUnidocPlugin)
 
 
-lazy val fragnosticConfSupport = Project(
-  id = "fragnostic-conf-support",
-  base = file("fragnostic-conf-support")).settings(
+lazy val fragnosticConfBase = Project(
+  id = "fragnostic-conf-base",
+  base = file("fragnostic-conf-base")).settings(
     scalatraSettings ++ Seq(
     libraryDependencies ++= Seq(
       scalatest
     ) ,
-    description := "fragnostic-conf-support"
+    description := "fragnostic-conf-base"
   )
 ) dependsOn(
 )

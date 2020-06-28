@@ -1,4 +1,4 @@
-package com.fragnostic.conf.service.support
+package com.fragnostic.conf.base.service.support
 
 import org.scalatest.{ FunSpec, Matchers }
 
