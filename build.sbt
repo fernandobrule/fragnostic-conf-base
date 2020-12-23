@@ -43,35 +43,6 @@ lazy val frgConfBaseSettings = Seq(
   scalacOptions in (c, console) --= unusedOptions.value
 )
 
-lazy val vilFatBackendProject = Project(
-  id = "fragnostic-conf-base-project",
-  base = file(".")).settings(
-    frgConfBaseSettings ++ Seq(
-    name := "fragnostic conf base",
-    artifacts := Classpaths.artifactDefs(Seq(packageDoc in Compile, makePom in Compile)).value,
-    packagedArtifacts := Classpaths.packaged(Seq(packageDoc in Compile, makePom in Compile)).value,
-    description := "fragnostic conf base",
-    shellPrompt := { state =>
-      s"sbt:${Project.extract(state).currentProject.id}" + Def.withColor("> ", Option(scala.Console.CYAN))
-    }
-  ) ++ Defaults.packageTaskSettings(
-    packageDoc in Compile, (unidoc in Compile).map(_.flatMap(Path.allSubpaths))
-  )).aggregate(
-    frgConfBase
-  ).enablePlugins(ScalaUnidocPlugin)
-
-lazy val frgConfBase = Project(
-  id = "fragnostic-conf-base",
-  base = file("fragnostic-conf-base")).settings(frgConfBaseSettings ++ Seq(
-    libraryDependencies ++= Seq(
-      //
-    ),
-    description := "fragnostic-conf-base"
-  )
-) dependsOn(
-  //
-)
-
 lazy val manifestSetting = packageOptions += {
   Package.ManifestAttributes(
     "Created-By" -> "Simple Build Tool",
@@ -89,7 +60,7 @@ lazy val manifestSetting = packageOptions += {
 
 // Things we care about primarily because Maven Central demands them
 lazy val mavenCentralFrouFrou = Seq(
-  homepage := Some(new URL("http://www.notyet.com.br")),
+  homepage := Some(new URL("http://www.fragnostic.com.br")),
   startYear := Some(2020),
   pomExtra := pomExtra.value ++ Group(
     <developers>
@@ -103,3 +74,32 @@ lazy val mavenCentralFrouFrou = Seq(
 )
 
 lazy val doNotPublish = Seq(publish := {}, publishLocal := {}, PgpKeys.publishSigned := {}, PgpKeys.publishLocalSigned := {})
+
+lazy val frgConfBaseProject = Project(
+  id = "fragnostic-conf-base-project",
+  base = file(".")).settings(
+    frgConfBaseSettings ++ Seq(
+    name := "fragnostic conf base project",
+    artifacts := Classpaths.artifactDefs(Seq(packageDoc in Compile, makePom in Compile)).value,
+    packagedArtifacts := Classpaths.packaged(Seq(packageDoc in Compile, makePom in Compile)).value,
+    description := "A Fragnostic Conf Base",
+    shellPrompt := { state =>
+      s"sbt:${Project.extract(state).currentProject.id}" + Def.withColor("> ", Option(scala.Console.CYAN))
+    }
+  ) ++ Defaults.packageTaskSettings(
+    packageDoc in Compile, (unidoc in Compile).map(_.flatMap(Path.allSubpaths))
+  )).aggregate(
+    frgConfBase
+  ).enablePlugins(ScalaUnidocPlugin)
+
+lazy val frgConfBase = Project(
+  id = "fragnostic-conf-base",
+  base = file("fragnostic-conf-base")).settings(frgConfBaseSettings ++ Seq(
+    libraryDependencies ++= Seq(
+      scalatest
+    ),
+    description := "fragnostic conf base"
+  )
+) dependsOn(
+  //
+)
