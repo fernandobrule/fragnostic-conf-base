@@ -14,6 +14,8 @@ trait ConfServiceApi {
 
     def getLong(key: String): Either[String, Option[Long]]
 
+    def getBoolean(key: String): Either[String, Option[Boolean]]
+
   }
 
 }
