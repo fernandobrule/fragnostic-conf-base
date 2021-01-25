@@ -4,6 +4,9 @@ import scala.util.Try
 
 trait TypesSupport {
 
+  def toBoolean(opt: Option[String]): Either[String, Option[Boolean]] =
+    toType(opt, (a: String) => a.toBoolean)
+
   def toShort(opt: Option[String]): Either[String, Option[Short]] =
     toType(opt, (a: String) => a.toShort)
 

@@ -6,6 +6,12 @@ class TypesSupportTest extends FunSpec with Matchers with TypesSupport {
 
   describe("Types Support Test") {
 
+    it("Can Get Booleam") {
+      toType(Some("true"), (a: String) => a.toBoolean) fold (
+        error => false,
+        opt => opt map (myBoolean => myBoolean) getOrElse false) should be(true)
+    }
+
     it("Can Get Long") {
       toType(Some("123"), (a: String) => a.toLong) fold (
         error => 456L,
