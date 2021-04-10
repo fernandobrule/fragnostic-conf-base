@@ -2,6 +2,7 @@ package com.fragnostic.conf.base.service.support
 
 import scala.util.Try
 
+@SerialVersionUID(74567674352L)
 trait TypesSupport {
 
   def toBoolean(opt: Option[String]): Either[String, Option[Boolean]] =
