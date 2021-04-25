@@ -1,5 +1,7 @@
 package com.fragnostic.conf.base.service.api
 
+import java.util.Locale
+
 trait ConfServiceApi {
 
   def confServiceApi: ConfServiceApi
@@ -7,6 +9,8 @@ trait ConfServiceApi {
   trait ConfServiceApi {
 
     def getString(key: String): Either[String, Option[String]]
+
+    def getString(locale: Locale, key: String): Either[String, Option[String]]
 
     def getShort(key: String): Either[String, Option[Short]]
 
