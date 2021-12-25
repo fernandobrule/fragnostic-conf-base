@@ -96,7 +96,7 @@ lazy val frgConfBase = Project(
   id = "fragnostic-conf-base",
   base = file("fragnostic-conf-base")).settings(frgConfBaseSettings ++ Seq(
     libraryDependencies ++= Seq(
-      scalatest
+      scalatestFunSpec
     ),
     description := "fragnostic conf base"
   )
