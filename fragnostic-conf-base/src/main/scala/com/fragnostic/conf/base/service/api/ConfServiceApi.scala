@@ -8,17 +8,17 @@ trait ConfServiceApi {
 
   trait ConfServiceApi {
 
-    def getString(key: String): Either[String, Option[String]]
+    def getString(key: String): Either[String, String]
 
-    def getString(locale: Locale, key: String): Either[String, Option[String]]
+    def getString(locale: Locale, key: String): Either[String, String]
 
-    def getShort(key: String): Either[String, Option[Short]]
+    def getShort(key: String): Either[String, Short]
 
-    def getInt(key: String): Either[String, Option[Int]]
+    def getInt(key: String): Either[String, Int]
 
-    def getLong(key: String): Either[String, Option[Long]]
+    def getLong(key: String): Either[String, Long]
 
-    def getBoolean(key: String): Either[String, Option[Boolean]]
+    def getBoolean(key: String): Either[String, Boolean]
 
   }
 
