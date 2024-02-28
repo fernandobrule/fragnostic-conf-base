@@ -30,6 +30,14 @@ class TypesSupportTest extends AnyFunSpec with TypesSupport {
       )(123)
     }
 
+    it("Can Get BigDecimal") {
+      assertResult(BigDecimal("123"))(toType("123", (a: String) => BigDecimal(a)) fold (
+        error => 456,
+        myBigDecimal => myBigDecimal //
+      ) //
+      )
+    }
+
     it("Can Get Int") {
       assertResult(toType("123", (a: String) => a.toInt) fold (
         error => 456,
