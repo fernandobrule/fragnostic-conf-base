@@ -14,6 +14,8 @@ trait ConfServiceApi {
 
     def getShort(key: String): Either[String, Short]
 
+    def getBigDecimal(key: String): Either[String, BigDecimal]
+
     def getInt(key: String): Either[String, Int]
 
     def getLong(key: String): Either[String, Long]
